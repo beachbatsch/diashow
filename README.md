@@ -1,3 +1,9 @@
+Purpose
+=======
+Mount a remote folder via davfs2.
+Synchronize the images and images in subfolders to a local folder.
+Show all the images as a diashow and synchronize in intervalls.
+
 Platform
 ========
 
