@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Diashow
+Comment=Diashow
+Terminal=true
+Type=Application
+Exec=/home/dia.show/apps/diashow/scheduler.sh
+
