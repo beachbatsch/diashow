@@ -6,7 +6,7 @@ from configparser import ConfigParser, NoSectionError
 
 
 APP_FOLDER = sys.path[0]
-CONFIG_FOLDER_NAME = ".conf" 
+CONFIG_FOLDER_NAME = "conf" 
 CONFIG_file_name = "config.yaml"
 CONFIG_FOLDER_PATH = path.join(APP_FOLDER, CONFIG_FOLDER_NAME)
 CONFIG_FILE_PATH = path.join(CONFIG_FOLDER_PATH, CONFIG_file_name)
@@ -59,7 +59,7 @@ class Configuration(object):
             self.__config.set('general', 'list_folder_name', ".lists")
             self.__config.set('general', 'log_folder_name', ".logs")
             self.__config.set('general', 'lock_folder_name', ".locks")
-            self.__config.set('general', 'res_folder_name', ".res")
+            self.__config.set('general', 'res_folder_name', "resources")
             self.__config.set('general', 'diashow_app_name', 'feh')
 
             self.__config.add_section('scheduler')

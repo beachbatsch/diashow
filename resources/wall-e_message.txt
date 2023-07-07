@@ -1,0 +1,7 @@
+Erstellt am {creation_date}
+
+Dieser Ordner inklusive der Dateien wird in {duration_in_days} Tagen automatisch gelöscht.
+
+Mit besten Grüßen
+
+Wall-e

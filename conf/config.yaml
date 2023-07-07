@@ -1,0 +1,33 @@
+[general]
+images_to_show_folder_path = /home/dshow/Bilder/
+list_folder_name = .lists
+log_folder_name = .logs
+lock_folder_name = .locks
+res_folder_name = resources
+diashow_app_name = feh
+
+[scheduler]
+lock_file_name = .scheduler_run
+log_file_name = scheduler.log
+intervall_in_seconds = 10
+
+[synchronize]
+src_folder_path = /mnt/iserv/
+lock_file_name = .synchronizing
+log_file_name = synchronizations.log
+fill-in_image_name = fill-in.jpg
+src_list_file_name = src.list
+dst_list_file_name = dst.list
+
+[safestart]
+lock_file_name = .safestart_diashow
+log_file_name = safestart_diashow.log
+
+[wall-e]
+lock_file_name = .wall-e
+log_file_name = wall-e.log
+duration_in_days = 30
+message_file_name = wall-e_message.txt
+prefix_message_date = Erstellt am 
+prefix_message_duration = Dieser Ordner inklusive der Dateien wird in 
+

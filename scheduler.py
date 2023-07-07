@@ -17,7 +17,7 @@ INTERVALL_IN_SECONDS = config.getInstance().getInt("scheduler", "intervall_in_se
 
 LOG_FILE_PATH = config.getInstance().getLogFilePath("scheduler")
 LOCK_FILE_PATH = config.getInstance().getLockFilePath("scheduler")
-
+5
 SAFESTART_PY_CMD = "/usr/bin/python '" + path.join(APP_FOLDER, "safestart_diashow.py") + "'"
 SYNCHRONIZE_PY_CMD = "/usr/bin/python '" + path.join(APP_FOLDER, "synchronize.py") + "'"
 WALLE_PY_CMD = "/usr/bin/python '" + path.join(APP_FOLDER, "wall-e.py") + "'"
