@@ -1,10 +1,12 @@
 from datetime import datetime
 from os import walk
 from os import path
+from os import remove
 from os.path import exists
 from modules.configuration import Configuration as config
 from modules import locking
 from modules import logging
+from modules import io
 
 import sys
 import shutil
@@ -120,15 +122,22 @@ def __readDuration(message_file_path):
             return int(duration)
     return None
 
-def __deleteFolder(folder_path):
-    shutil.rmtree(folder_path)
+
+def __deleteAllFilesInFolder(folder_path):
+    file_paths = []
+    for (dirpath, dirnames, filenames) in walk(folder_path):
+        file_paths.extend(filenames)
+        break
+    for file_path in file_paths:
+        remove(file_path)
+
 
 def checkDurations(folders):
     for folder_path in folders:
         message_file_path = path.join(folder_path, MESSAGE_FILE_NAME)
         duration = __readDuration(message_file_path)
         if duration <= 0:
-            __deleteFolder(folder_path)
+            __deleteAllFilesInFolder(folder_path)
 
 # -------------------- avoid starting without src-folder ------------------
 print ("<<<<<<<<<<<<< wall-e started >>>>>>>>>>>>>>")
@@ -148,6 +157,7 @@ if (existsSrcFolder()):
         createMissingMessages(folders)
         updateDurations(folders)
         checkDurations(folders)
+        io.deleteEmptyFolders(SRC_FOLDER_PATH, False)
         locking.unlock(LOCK_FILEPATH)
     else:
         print("wall-e is running")

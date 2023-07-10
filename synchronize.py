@@ -7,6 +7,7 @@ from os.path import exists
 from modules.configuration import Configuration as config
 from modules import logging
 from modules import locking
+from modules import io
  
 import sys
 import shutil
@@ -127,14 +128,8 @@ def isImage(src_path):
 
 # --------------------------- delete empty folders --------------------------         
 def deleteEmptyFoldersFromDst():
-    deleteEmptyFolders(IMAGES_TO_SHOW_FOLDER_PATH)
+    io.deleteEmptyFolders(IMAGES_TO_SHOW_FOLDER_PATH, include_base_path=False)
 
-def deleteEmptyFolders(path_abs):
-    walklist = list(walk(path_abs))
-    for path, _, _ in walklist[::-1]:
-        if len(listdir(path)) == 0:
-            if path != IMAGES_TO_SHOW_FOLDER_PATH:
-                shutil.rmtree(path)
 
 # ----------------------------- fill-in image -------------------------------
 def preventEmptyImageFolder():
