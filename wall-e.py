@@ -6,7 +6,10 @@ from os.path import exists
 from modules.configuration import Configuration as config
 from modules import locking
 from modules import logging
-from modules import io
+from modules.io import deleteEmptyFolders
+from modules.io import deleteAllFilesInFolder
+from modules.io import isImage
+from modules.io import getAllFolderPaths
 
 import sys
 import shutil
@@ -25,15 +28,7 @@ WALLE_MESSAGE_FILE_PATH = config.getInstance().getWallEMessageFilePath()
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
-
-def __getAllFolders(directory):
-    folder_paths = [] 
-    for (root, dirs, files) in walk(directory):
-        for dir_name in dirs:
-            folder_path = path.join(root, dir_name)
-            folder_paths.append(folder_path)
-    return folder_paths
-
+# ------------------------------ create missing messages --------------------------------
 
 def __replaceStringInFile(file_path, str_to_replace, replacement):
     file = open(file_path, "r")
@@ -57,14 +52,28 @@ def __writeCreationDate(message_file_path):
     
 
 
-def createMissingMessages(folders):
-    for folder in folders:
-        message_file_path = path.join(folder, MESSAGE_FILE_NAME)
-        if exists(message_file_path) == False:
-            shutil.copyfile(WALLE_MESSAGE_FILE_PATH, message_file_path)
-            __writeCreationDate(message_file_path)
+def __containsAtLeastOneImage(folder_path, recursive=False):
+    for (root_path, dir_names, file_names) in walk(folder_path):
+        for file_name in file_names:
+            file_path = path.join(root_path, file_name)
+            if isImage(file_path):
+                return True
+        if recursive == False:
+            break
+
+    return False
 
 
+def createMissingMessages(folder_paths):
+    for folder_path in folder_paths:
+        if __containsAtLeastOneImage(folder_path) == True:
+            message_file_path = path.join(folder_path, MESSAGE_FILE_NAME)
+            if exists(message_file_path) == False:
+                shutil.copyfile(WALLE_MESSAGE_FILE_PATH, message_file_path)
+                __writeCreationDate(message_file_path)
+
+
+# -------------------------------- update  messages ----------------------------------
 def __readCreationDate(message_file_path):
     file = open(message_file_path, "r")
     lines = file.read().splitlines()
@@ -94,23 +103,6 @@ def __replaceDuration(message_file_path, duration_in_days):
     file.close()
 
 
-
-def __writeDuration(message_file_path):
-    now = datetime.now()
-    creation_date = __readCreationDate(message_file_path)
-    delta = now - creation_date
-    duration = DURATION_IN_DAYS - delta.days
-
-    __replaceDuration(message_file_path, duration)
-
-
-
-def updateDurations(folders):
-    for folder in folders:
-        message_file_path = path.join(folder, MESSAGE_FILE_NAME)
-        __writeDuration(message_file_path)
-
-
 def __readDuration(message_file_path):
     file = open(message_file_path, "r")
     lines = file.read().splitlines()
@@ -123,23 +115,38 @@ def __readDuration(message_file_path):
     return None
 
 
-def __deleteAllFilesInFolder(folder_path):
-    file_paths = []
-    for (dirpath, dirnames, filenames) in walk(folder_path):
-        file_paths.extend(filenames)
-        break
-    for file_path in file_paths:
-        remove(file_path)
+def __writeDuration(message_file_path):
+    written_duration_in_days = __readDuration(message_file_path)
+    
+    now = datetime.now()
+    creation_date = __readCreationDate(message_file_path)
+    elapsed = now - creation_date
+    duration_in_days = written_duration_in_days - elapsed.days
+
+    __replaceDuration(message_file_path, duration_in_days)
 
 
+
+def updateDurations(folders):
+    for folder in folders:
+        message_file_path = path.join(folder, MESSAGE_FILE_NAME)
+        if exists(message_file_path):
+            __writeDuration(message_file_path)
+
+
+
+
+# -------------------------------- deletion part ----------------------------------
 def checkDurations(folders):
     for folder_path in folders:
         message_file_path = path.join(folder_path, MESSAGE_FILE_NAME)
-        duration = __readDuration(message_file_path)
-        if duration <= 0:
-            __deleteAllFilesInFolder(folder_path)
+        if exists(message_file_path):
+            duration = __readDuration(message_file_path)
+            if duration <= 0:
+                deleteAllFilesInFolder(folder_path)
 
-# -------------------- avoid starting without src-folder ------------------
+
+
 print ("<<<<<<<<<<<<< wall-e started >>>>>>>>>>>>>>")
 def existsSrcFolder():
     if exists(SRC_FOLDER_PATH):
@@ -153,11 +160,11 @@ if (existsSrcFolder()):
     if (locking.isLocked(LOCK_FILEPATH) == False):
         locking.lock(LOCK_FILEPATH)
         logging.writeLog(LOG_FILE_PATH,"wall-e - START", True)
-        folders = __getAllFolders(SRC_FOLDER_PATH)
+        folders = getAllFolderPaths(SRC_FOLDER_PATH)
         createMissingMessages(folders)
         updateDurations(folders)
         checkDurations(folders)
-        io.deleteEmptyFolders(SRC_FOLDER_PATH, False)
+        deleteEmptyFolders(SRC_FOLDER_PATH, False)
         locking.unlock(LOCK_FILEPATH)
     else:
         print("wall-e is running")

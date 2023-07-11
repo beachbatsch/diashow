@@ -8,10 +8,10 @@ from modules.configuration import Configuration as config
 from modules import logging
 from modules import locking
 from modules.io import deleteEmptyFolders
+from modules.io import isImage
  
 import sys
 import shutil
-import mimetypes
 
 APP_FOLDER =  sys.path[0]
 SRC_FOLDER_PATH =  config.getInstance().getString("synchronize", "src_folder_path")
@@ -121,12 +121,6 @@ def copyMissingFiles():
     except Exception as e:
         print("exception occurred reading files: " + str(e))
 
-
-def isImage(src_path):
-    mime_type = mimetypes.guess_type(src_path)
-    if mime_type[0].find("image") >= 0:
-        return True
-    return False
 
 # --------------------------- delete empty folders --------------------------         
 def deleteEmptyFoldersFromDst():
