@@ -3,8 +3,8 @@ import sys
 from modules.configuration import Configuration as config
 
 APP_FOLDER = sys.path[0]
-LOCK_FILEPATH = config.instance().getLockFilePath("scheduler")
-DIASHOW_APP_NAME = config.instance().getString("general", "diashow_app_name")
+LOCK_FILEPATH = config.getInstance().getLockFilePath("scheduler")
+DIASHOW_APP_NAME = config.getInstance().getString("general", "diashow_app_name")
 
 
 def stopDiashow():
