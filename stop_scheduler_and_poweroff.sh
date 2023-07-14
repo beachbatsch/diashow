@@ -6,6 +6,6 @@
 
 /usr/bin/python $(dirname "$0")/stop_scheduler.py
 
-sleep 60
+sleep 20
 
-sudo /usr/bin/poweroff
+sudo /usr/sbin/poweroff
