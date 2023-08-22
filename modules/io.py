@@ -4,6 +4,7 @@ from os import remove
 from os import path
 from shutil import rmtree
 import mimetypes
+import time
 
 
 def getAllFolderPaths(directory, recursive=True):
@@ -26,6 +27,20 @@ def deleteEmptyFolders(base_path, include_base_path):
                     rmtree(path)
             else:
                 rmtree(path)
+                
+
+def deleteEmptyOldFolders(base_path, include_base_path, max_age_in_seconds):
+    walklist = list(walk(base_path))
+    for path, _, _ in walklist[::-1]:
+        if len(listdir(path)) == 0:
+            if path == base_path:
+                if include_base_path == True:
+                    if (getFolderAgeInSeconds(path) > max_age_in_seconds):
+                        rmtree(path)
+            else:
+                if (getFolderAgeInSeconds(path) > max_age_in_seconds):
+                    rmtree(path)
+
 
 
 def deleteAllFilesInFolder(folder_path):
@@ -45,3 +60,10 @@ def isImage(src_path):
     if mime_type[0].find("image") >= 0:
         return True
     return False
+
+
+def getFolderAgeInSeconds(folder_path):
+    creation_secs = path.getctime(folder_path)
+    now = time.time()
+    duration = now - creation_secs
+    return duration

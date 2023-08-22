@@ -6,13 +6,15 @@ from os.path import exists
 from modules.configuration import Configuration as config
 from modules import locking
 from modules import logging
-from modules.io import deleteEmptyFolders
+from modules.io import deleteEmptyOldFolders
 from modules.io import deleteAllFilesInFolder
 from modules.io import isImage
 from modules.io import getAllFolderPaths
+from modules.io import getFolderAgeInSeconds
 
 import sys
 import shutil
+import time
 
 APP_FOLDER =  sys.path[0]
 SRC_FOLDER_PATH =  config.getInstance().getString("synchronize", "src_folder_path")
@@ -20,6 +22,7 @@ MESSAGE_FILE_NAME = config.getInstance().getString("wall-e", "message_file_name"
 DURATION_IN_DAYS = config.getInstance().getInt("wall-e", "duration_in_days")
 PREFIX_MESSAGE_DATE = config.getInstance().getString("wall-e", "prefix_message_date")
 PREFIX_MESSAGE_DURATION = config.getInstance().getString("wall-e", "prefix_message_duration")
+MIN_FOLDER_AGE_IN_SECONDS = config.getInstance().getInt("wall-e", "min_folder_age_in_seconds")
 
 LOG_FILE_PATH = config.getInstance().getLogFilePath("wall-e")
 LOCK_FILEPATH = config.getInstance().getLockFilePath("wall-e")
@@ -136,15 +139,16 @@ def updateDurations(folders):
 
 
 
-
 # -------------------------------- deletion part ----------------------------------
 def checkDurations(folders):
     for folder_path in folders:
-        message_file_path = path.join(folder_path, MESSAGE_FILE_NAME)
-        if exists(message_file_path):
-            duration = __readDuration(message_file_path)
-            if duration <= 0:
-                deleteAllFilesInFolder(folder_path)
+        if (getFolderAgeInSeconds(folder_path) > MIN_FOLDER_AGE_IN_SECONDS):
+            message_file_path = path.join(folder_path, MESSAGE_FILE_NAME)
+            if exists(message_file_path):
+                duration = __readDuration(message_file_path)
+                if duration <= 0:
+                    print ("duration <= 0!!!!")
+                    deleteAllFilesInFolder(folder_path)
 
 
 
@@ -165,7 +169,8 @@ if (existsSrcFolder()):
         createMissingMessages(folders)
         updateDurations(folders)
         checkDurations(folders)
-        deleteEmptyFolders(SRC_FOLDER_PATH, False)
+        deleteEmptyOldFolders(SRC_FOLDER_PATH, False, MIN_FOLDER_AGE_IN_SECONDS
+    )
         locking.unlock(LOCK_FILEPATH)
     else:
         print("wall-e is running")

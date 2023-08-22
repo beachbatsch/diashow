@@ -9,7 +9,7 @@ diashow_app_name = feh
 [scheduler]
 lock_file_name = .scheduler_run
 log_file_name = scheduler.log
-intervall_in_seconds = 10
+intervall_in_seconds = 60
 
 [synchronize]
 src_folder_path = /mnt/iserv/
@@ -30,4 +30,5 @@ duration_in_days = 30
 message_file_name = wall-e_message.txt
 prefix_message_date = Erstellt am 
 prefix_message_duration = Dieser Ordner inklusive der Dateien wird in 
+min_folder_age_in_seconds = 120
 

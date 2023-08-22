@@ -86,6 +86,7 @@ class Configuration(object):
             self.__config.set('wall-e', 'message_file_name', 'wall-e_message.txt')
             self.__config.set('wall-e', 'prefix_message_date', 'Erstellt am ')
             self.__config.set('wall-e', 'prefix_message_duration', 'Dieser Ordner inklusive der Dateien wird in ')
+            self.__config.set('wall-e', 'min_folder_age_in_seconds', 120)
 
             self.__config.write(cfgfile)
             cfgfile.close()
