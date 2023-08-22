@@ -64,9 +64,13 @@ Login the user *dshow* if not happened yet:
  
 APP-FOLDER
 ==========
-Copy all files including the hidden files to a folder, e.g. */home/dshow/apps/diashow*
+Clone the repository
+> `mkdir /home/dshow/apps/`
+> `cd /home/dshow/apps/`
+> `git clone https://github.com/beachbatsch/diashow.git`
+ 
 Mark the bash files executable:
-> `sudo chmod o+x /home/dshow/apps/diashow/*.sh`
+> `sudo chmod +x /home/dshow/apps/diashow/*.sh`
 
 
 Autostart

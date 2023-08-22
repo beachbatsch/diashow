@@ -71,6 +71,7 @@ def createMissingMessages(folder_paths):
             if exists(message_file_path) == False:
                 shutil.copyfile(WALLE_MESSAGE_FILE_PATH, message_file_path)
                 __writeCreationDate(message_file_path)
+                __replaceDuration(message_file_path, DURATION_IN_DAYS)
 
 
 # -------------------------------- update  messages ----------------------------------
