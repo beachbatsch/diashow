@@ -31,4 +31,3 @@ message_file_name = wall-e_message.txt
 prefix_message_date = Erstellt am 
 prefix_message_duration = Dieser Ordner inklusive der Dateien wird in 
 min_folder_age_in_seconds = 120
-
