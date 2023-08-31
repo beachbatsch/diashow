@@ -39,7 +39,7 @@ In Raspbian it was neccessary to reconfigure davfs to allow all users to mount t
 > --> allow all users to mount --> yes
 
 Add the user to the davfs group:
-> `sudo usermod -a -G davfs2` 
+> `sudo usermod -a -G davfs2 dshow` 
 
 Edit the file **/etc/fstab**:
 > `sudo vi /etc/fstab`
