@@ -24,7 +24,7 @@ AUTOMOUNT DAVFS2-SHARE
 ======================
 In the following example the variables are:
 - username: dshow
-- user-id: 1001
+- user-id: 1000
 - local folder: /mnt/iserv/
 - remote folder: https://subdomain.iserv.de/remote.php/webdav
   
@@ -44,12 +44,12 @@ Add the user to the davfs group:
 Edit the file **/etc/fstab**:
 > `sudo vi /etc/fstab`
 
-	https://subdomain.iserv.de/remote.php/webdav	/mnt/iserv/	davfs	user,uid=1000,gid=1000,rw,nofail	0	0
+	https://webdav.iserv.de/	/mnt/iserv/	davfs	user,uid=1000,gid=1000,rw,nofail	0	0
 
 Edit the file **/etc/davfs/secrets**:
 > `sudo vi /etc/davfs/secrets`
 
-	https://subdomain.iserv.de/remote.php/webdav	dshow	PASSWORD
+	https://webdav.iserv.de/	dshow	PASSWORD
 
 Allow the user *dshow* to mount without a password:
 > `sudo visudo`
@@ -82,4 +82,4 @@ To autostart the diashow create a *.desktop-file* in the folder * /home/dshow/.c
 	Comment=Diashow
 	Terminal=true
 	Type=Application
-	Exec=/home/dia.show/apps/mp_diashow/scheduler.sh
+	Exec=/home/dshow/apps/mp_diashow/start_scheduler.sh

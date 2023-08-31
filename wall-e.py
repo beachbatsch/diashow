@@ -147,7 +147,6 @@ def checkDurations(folders):
             if exists(message_file_path):
                 duration = __readDuration(message_file_path)
                 if duration <= 0:
-                    print ("duration <= 0!!!!")
                     deleteAllFilesInFolder(folder_path)
 
 
